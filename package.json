@@ -1,0 +1,26 @@
+{
+  "name": "rest-project",
+  "version": "1.0.0",
+  "description": "Simple Rest Project ",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marcosmoresco/rest-project.git"
+  },
+  "author": "Marcos Moresco",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marcosmoresco/rest-project/issues"
+  },
+  "homepage": "https://github.com/marcosmoresco/rest-project",
+  "dependencies": {
+    "log4js": "^0.6.36",
+    "moment": "^2.13.0",
+    "mongodb": "^2.1.21",
+    "mongoose": "^4.4.19",
+    "restify": "^4.1.0"
+  }
+}
