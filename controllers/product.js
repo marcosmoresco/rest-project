@@ -3,11 +3,6 @@ var restify = require('restify'),
   logger = require('../config/logger'),
   Product = require('../models/product');
 
-server.get('/product/:name', function(req, res, next) {
-  res.send(req.params);
-  return next();
-});
-
 server.get('/products', function(req, res, next) {
   Product.find({}, function(err, products) {
     res.send(products);
@@ -38,9 +33,15 @@ server.post('/products', function(req, res, next) {
   var product = new Product(req.body);
 
   product.save(function(err, productSaved) {
-    if (err) return logger.error(err);
-    logger.info('Save Product %s ', productSaved);
-    res.send(productSaved);
+    if (err) {
+      res.send({
+        erro: 'Error save product'
+      });
+      logger.error(err);
+    } else {
+      logger.info('Save Product %s ', productSaved);
+      res.send(productSaved);
+    }
     return next();
   });
 });
@@ -52,13 +53,25 @@ server.put('/products', function(req, res, next) {
   Product.findOne({
     _id: product.id
   }, function(err, productSaved) {
-    if (err) return logger.error(err);
-    Product.update(productSaved, product, function(err, productUpdated) {
-      if (err) return logger.error(err);
-      logger.info('Update Product %s ', productUpdated);
-      res.send(productUpdated);
-      return next();
-    });
+    if (err) {
+      res.send({
+        erro: 'Error find product by id=' + product.id
+      });
+      logger.error(err);
+    } else {
+      Product.update(productSaved, product, function(err, productUpdated) {
+        if (err) {
+          res.send({
+            erro: 'Error update product by id=' + product.id
+          });
+          logger.error(err);
+        } else {
+          logger.info('Update Product %s ', productUpdated);
+          res.send(productUpdated);
+        }
+      });
+    }
+    return next();
   });
 });
 
@@ -66,9 +79,15 @@ server.del('/products/:id', function(req, res, next) {
   Product.remove({
     _id: req.params.id
   }, function(err) {
-    if (err) return logger.error(err);
-    logger.info('Delete Product with id=%s', req.params.id);
-    res.send("Successfully deleted product!");
+    if (err) {
+      res.send({
+        erro: 'Error delete product by id=' + req.params.id
+      });
+      logger.error(err);
+    } else {
+      logger.info('Delete Product with id=%s', req.params.id);
+      res.send("Successfully deleted product!");
+    }
     return next();
   });
 });
